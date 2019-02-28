@@ -19,7 +19,7 @@
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/images" />
+           />
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"

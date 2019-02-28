@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+/*
 public class singup_activity extends AppCompatActivity {
     private EditText name, email_id, passwordcheck;
     private FirebaseAuth mAuth;
@@ -75,3 +76,4 @@ public class singup_activity extends AppCompatActivity {
         });
     }
 }
+*/

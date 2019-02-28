@@ -1,35 +1,33 @@
 package com.example.mobileportfolio;
 
-import android.content.Intent;
+//Chetha
+
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.mobileportfolio.Fragments.BlankFragment;
-import com.example.mobileportfolio.Fragments.BlankFragment2;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.mobileportfolio.Fragments.Browse;
+import com.example.mobileportfolio.Fragments.AddUpload;
+import com.example.mobileportfolio.Fragments.MyArts;
+import com.example.mobileportfolio.Fragments.Profile;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
-    FirebaseAuth.AuthStateListener mAuthListner;
+//    FirebaseAuth mAuth;
+//    FirebaseAuth.AuthStateListener mAuthListner;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListner);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        mAuth.addAuthStateListener(mAuthListner);
+//    }
 
 
     private DrawerLayout mDrawerlayout;
@@ -44,11 +42,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-      setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
 
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
-
 
 
         mDrawerlayout = findViewById(R.id.maindrawer);
@@ -56,44 +53,39 @@ public class MainActivity extends AppCompatActivity {
         mDrawerlayout.addDrawerListener(mtoggle);
 
 
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_screen_activity);
-        Button button = (Button) findViewById(R.id.signout);
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListner = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser()==null)
-                {
-                    startActivity(new Intent(Home_screen.this, singin_activity.class));
-                }
-            }
-        };
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-            }
-        });
+//        super.onCreate(savedInstanceState);
+//        //setContentView(R.layout.home_screen_activity);
+//        Button button = (Button) findViewById(R.id.signout);
+//        mAuth = FirebaseAuth.getInstance();
+//        mAuthListner = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                if (firebaseAuth.getCurrentUser()==null)
+//                {
+//                    startActivity(new Intent(Home_screen.this, singin_activity.class));
+//                }
+//            }
+//        };
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mAuth.signOut();
+//            }
+//        });
     }
-
-
-
-
 
 
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
-        return new ActionBarDrawerToggle(this, mDrawerlayout, mToolbar, R.string.open,  R.string.close);
+        return new ActionBarDrawerToggle(this, mDrawerlayout, mToolbar, R.string.open, R.string.close);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-      mtoggle.syncState();
+        mtoggle.syncState();
     }
 
     @Override
@@ -140,15 +132,22 @@ public class MainActivity extends AppCompatActivity {
     private void selectDrawerItem(MenuItem menuItem) {
         Fragment fragment = null;
         Class fragmentClass;
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.browse:
-                fragmentClass = BlankFragment.class;
+                fragmentClass = Browse.class;
                 break;
             case R.id.addupload:
-                fragmentClass = BlankFragment2.class;
+                fragmentClass = AddUpload.class;
                 break;
+            case R.id.myarts:
+                fragmentClass = MyArts.class;
+                break;
+            case R.id.profile:
+                fragmentClass = Profile.class;
+                break;
+
             default:
-                fragmentClass = BlankFragment.class;
+                fragmentClass = Browse.class;
         }
 
         try {
@@ -168,10 +167,6 @@ public class MainActivity extends AppCompatActivity {
         // Close the navigation drawer
         mDrawerlayout.closeDrawers();
     }
-
-//chetha
-
-
 
 
 }
