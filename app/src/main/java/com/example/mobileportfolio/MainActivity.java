@@ -1,6 +1,6 @@
 package com.example.mobileportfolio;
 
-//Chetha
+//Chethana
 
 import android.content.res.Configuration;
 import android.os.Bundle;
