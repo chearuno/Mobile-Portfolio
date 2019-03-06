@@ -3,8 +3,10 @@ package com.example.mobileportfolio;
 //Chetha
 //Arunodh
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,23 +14,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.mobileportfolio.Fragments.Browse;
 import com.example.mobileportfolio.Fragments.AddUpload;
 import com.example.mobileportfolio.Fragments.MyArts;
 import com.example.mobileportfolio.Fragments.Profile;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-
-//    FirebaseAuth mAuth;
-//    FirebaseAuth.AuthStateListener mAuthListner;
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        mAuth.addAuthStateListener(mAuthListner);
-//    }
 
 
     private DrawerLayout mDrawerlayout;
@@ -36,9 +36,22 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private NavigationView nvDrawer;
 
+    private FirebaseAuth.AuthStateListener authListener;
+    private FirebaseAuth auth;
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
+
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -132,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem menuItem) {
         Fragment fragment = null;
-        Class fragmentClass;
+        Class fragmentClass = null;
         switch (menuItem.getItemId()) {
             case R.id.browse:
                 fragmentClass = Browse.class;
@@ -146,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.profile:
                 fragmentClass = Profile.class;
                 break;
+
+
 
             default:
                 fragmentClass = Browse.class;
@@ -170,4 +185,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
 }
+

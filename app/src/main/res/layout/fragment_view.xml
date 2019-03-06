@@ -48,7 +48,7 @@
                             android:gravity="center"
                             android:hint="Title"
                             android:inputType="text"
-                            android:maxLength="6"
+                            android:maxLength="30"
                             android:padding="5dp"
                             android:textAlignment="center"
                             android:textColor="@android:color/black"
@@ -115,12 +115,12 @@
                             android:gravity="center"
                             android:hint="Discription"
                             android:inputType="text"
-                            android:maxLength="6"
+                            android:maxLength="300"
                             android:padding="5dp"
                             android:textAlignment="center"
                             android:textColor="@android:color/black"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
@@ -132,8 +132,7 @@
                     android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic">
-               </ImageView>
+                    app:srcCompat="@drawable/main_bg"></ImageView>
 
 
                 <RatingBar
