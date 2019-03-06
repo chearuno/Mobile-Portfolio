@@ -69,10 +69,10 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!isValidEmail(email)){
-                    Toast.makeText(getApplicationContext(), "Invalid email address!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if(!isValidEmail(email)){
+//                    Toast.makeText(getApplicationContext(), "Invalid email address!", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
 
 

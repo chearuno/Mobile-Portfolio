@@ -1,6 +1,8 @@
 package com.example.mobileportfolio.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.mobileportfolio.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,9 +34,11 @@ import com.example.mobileportfolio.R;
 
 public class Profile extends Fragment {
     private Button signOut;
-    private ProgressBar progressBar;
+//    private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+
+
 
 
     @Override
@@ -41,10 +46,12 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
-/*
+        View view= inflater.inflate(R.layout.fragment_profile, container, false);
+
+        signOut = (Button) view.findViewById(R.id.sign_out);
+
         //get firebase auth instance
-        auth = FirebaseAuth.getInstance();
+       auth = FirebaseAuth.getInstance();
 
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -57,8 +64,9 @@ public class Profile extends Fragment {
                     // user auth state is changed - user is null
                     // launch login activity
                    // startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                   Log.e("Logout", "OK.");
-                   // finish();
+                    alertsignout();
+
+                    // finish();
                 }
 
             }
@@ -70,8 +78,9 @@ public class Profile extends Fragment {
                 signOut();
             }
         });
-
+        return view;
     }
+
 
 
 
@@ -80,11 +89,11 @@ public class Profile extends Fragment {
         auth.signOut();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        progressBar.setVisibility(View.GONE);
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        progressBar.setVisibility(View.GONE);
+//    }
 
     @Override
     public void onStart() {
@@ -98,7 +107,47 @@ public class Profile extends Fragment {
             auth.removeAuthStateListener(authListener);
         }
     }
-*/
+    public void alertsignout()
+    {
+        AlertDialog.Builder alertDialog2 = new
+                AlertDialog.Builder(
+                getActivity());
+
+        // Setting Dialog Title
+        alertDialog2.setTitle("Confirm SignOut");
+
+        // Setting Dialog Message
+        alertDialog2.setMessage("Are you sure you want to Signout?");
+
+        // Setting Positive "Yes" Btn
+        alertDialog2.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        //firebaseAuth.getInstance().signOut();
+                        Intent i = new Intent(getActivity(),
+                                LoginActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    }
+                });
+
+        // Setting Negative "NO" Btn
+        alertDialog2.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+//                        Toast.makeText(getApplicationContext(),
+//                                "You clicked on NO", Toast.LENGTH_SHORT)
+//                                .show();
+                        dialog.cancel();
+                    }
+                });
+
+        // Showing Alert Dialog
+        alertDialog2.show();
+
 
     }
 }
