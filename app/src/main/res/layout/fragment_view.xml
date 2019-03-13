@@ -131,8 +131,7 @@
                     android:layout_height="300dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/main_bg"></ImageView>
+                    android:clickable="true"></ImageView>
 
 
                 <RatingBar
@@ -171,6 +170,16 @@
                         android:text="Delete"
                         android:layout_margin="10dp"
                         android:textColor="@android:color/white" />
+
+                <Button
+
+                    android:id="@+id/btn_add"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="add"
+                    android:layout_margin="10dp"
+                    android:textColor="@android:color/white" />
 
 
             </LinearLayout>
