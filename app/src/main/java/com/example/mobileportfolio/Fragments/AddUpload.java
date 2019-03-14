@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -113,11 +114,14 @@ public class AddUpload extends Fragment {
             cursor.close();
 
 
-            image_main.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            image_main.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.main_content,new com.example.mobileportfolio.Fragments.View());
+//            fragmentTransaction.commit();
 
-        } if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            image_main.setImageBitmap(photo);
+//        } if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+//            Bitmap photo = (Bitmap) data.getExtras().get("data");
+//            image_main.setImageBitmap(photo);
 
 
         }

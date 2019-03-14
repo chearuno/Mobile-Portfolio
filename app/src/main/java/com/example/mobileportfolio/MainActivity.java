@@ -23,6 +23,7 @@ import com.example.mobileportfolio.Fragments.Browse;
 import com.example.mobileportfolio.Fragments.AddUpload;
 import com.example.mobileportfolio.Fragments.MyArts;
 import com.example.mobileportfolio.Fragments.Profile;
+import com.example.mobileportfolio.Fragments.ViewFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass = null;
         switch (menuItem.getItemId()) {
             case R.id.browse:
-                fragmentClass = Browse.class;
+                fragmentClass = ViewFragment.class;
                 break;
             case R.id.addupload:
                 fragmentClass = AddUpload.class;

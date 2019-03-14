@@ -48,7 +48,7 @@
                             android:gravity="center"
                             android:hint="Title"
                             android:inputType="text"
-                            android:maxLength="30"
+                            android:maxLength="50"
                             android:padding="5dp"
                             android:textAlignment="center"
                             android:textColor="@android:color/black"
@@ -94,8 +94,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="match_parent"
                     android:layout_margin="10dp"
+                    android:maxLength="300"
                     android:background="@drawable/shape"
                     android:elevation="5dp">
 
@@ -104,6 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true"
+                        android:maxLength="300"
                         app:errorTextAppearance="@style/MyAppTheme.TextInputLayout">
 
                         <android.support.design.widget.TextInputEditText
@@ -114,13 +116,12 @@
                             android:background="@android:color/transparent"
                             android:gravity="center"
                             android:hint="Discription"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
                             android:maxLength="300"
                             android:padding="5dp"
-                            android:textAlignment="center"
+                            android:textAlignment="textStart"
                             android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            />
+                            android:textSize="18sp" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
