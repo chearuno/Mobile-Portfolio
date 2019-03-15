@@ -119,9 +119,9 @@ public class AddUpload extends Fragment {
 //            fragmentTransaction.replace(R.id.main_content,new com.example.mobileportfolio.Fragments.View());
 //            fragmentTransaction.commit();
 
-//        } if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
-//            image_main.setImageBitmap(photo);
+        } if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            image_main.setImageBitmap(photo);
 
 
         }

@@ -15,4 +15,10 @@
         <item name="android:textColor">@color/errorMessageRed</item>
     </style>
 
+    <style name="AppTheme.SplashTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
 </resources>
