@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +58,7 @@ import java.util.UUID;
 import static android.app.Activity.RESULT_OK;
 
 
-public class ViewFragment extends Fragment {
+public class Add extends Fragment {
     private static final String TAG = "Fire base";
     private EditText inputTitle, inputCat, inputDisc;
     private Button btnSave;
@@ -75,9 +78,9 @@ public class ViewFragment extends Fragment {
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     String mCurrentPhotoPath;
     private Uri filePath;
-
+    boolean isImageFitToScreen;
     private String selection = "";
-
+    AVLoadingIndicatorView avi;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +93,7 @@ public class ViewFragment extends Fragment {
         inputDisc = (EditText) v.findViewById(R.id.txt_discription);
         inputRate = (RatingBar) v.findViewById(R.id.ratingBar);
         image_main = (ImageView) v.findViewById(R.id.imageView5);
+        avi = v.findViewById(R.id.avi);
 
         Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").into(image_main);
 
@@ -111,7 +115,7 @@ public class ViewFragment extends Fragment {
                 String Category = inputCat.getText().toString();
                 String Discription = inputDisc.getText().toString();
                 Float Rating = inputRate.getRating();
-                String imageId =  UUID.randomUUID().toString();
+                String imageId = UUID.randomUUID().toString();
 
                 Map<String, Object> city = new HashMap<>();
                 city.put("Title", Title);
@@ -120,8 +124,8 @@ public class ViewFragment extends Fragment {
                 city.put("Discription", Discription);
                 city.put("Rating", Rating);
                 city.put("date", new Timestamp(new Date()));
-                city.put("image",  imageId);
-                StorageReference ref = storageReference.child("images/" +imageId);
+                city.put("image", imageId);
+                StorageReference ref = storageReference.child("images/" + imageId);
                 ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -164,9 +168,7 @@ public class ViewFragment extends Fragment {
 
                             }
                         });
-                //Log.e("TEXT", Val);
-                //dbRef.child("asd").child("Title").setValue(Val);
-                //dbRef.child("asd").child("Cat").setValue("text   " + Val);
+
             }
         });
         inputCat.setOnClickListener(new View.OnClickListener() {
@@ -180,14 +182,27 @@ public class ViewFragment extends Fragment {
         image_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                camOrstorage();
 
             }
+
+
+        });
+
+        image_main.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                camOrstorage();
+                return false;
+
+            }
+
+
         });
 
         return v;
 
     }
+
 
     private void catagorylist() {
         final CharSequence[] items = {"Nature", "macro", "Potrait", "Landscape", "Arts", "mobile Capure", "Test 1"};
@@ -245,27 +260,6 @@ public class ViewFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-//            Uri selectedImage = data.getData();
-//            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//
-//            Cursor cursor = getActivity().getContentResolver().query(selectedImage,
-//                    filePathColumn, null, null, null);
-//            cursor.moveToFirst();
-//
-//            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//            String picturePath = cursor.getString(columnIndex);
-//            cursor.close();
-
-
-//            image_main.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-//            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.main_content,new com.example.mobileportfolio.Fragments.View());
-//            fragmentTransaction.commit();
-
-        //  }
-//        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-//            Bitmap photo = (Bitmap) data.getExtras().get("data");
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             filePath = data.getData();
@@ -275,10 +269,6 @@ public class ViewFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            //.setImageBitmap(photo);
-
-
         }
 
 

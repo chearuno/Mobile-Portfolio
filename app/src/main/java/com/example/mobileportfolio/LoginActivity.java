@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.wang.avi.AVLoadingIndicatorView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
+    AVLoadingIndicatorView avi;
     private Button btnSignup, btnLogin, btnReset;
 
     @Override
@@ -52,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup = (Button) findViewById(R.id.btn_signup);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
+        avi =findViewById(R.id.avi);
 
+        avi.hide();
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -87,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
+                avi.show();
 
                 //authenticate user
                 auth.signInWithEmailAndPassword(email, password)
@@ -97,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // the auth state listener will be notified and logic to handle the
                                 // signed in user can be handled in the listener.
                                 progressBar.setVisibility(View.GONE);
+                                avi.hide();
                                 if (!task.isSuccessful()) {
                                     // there was an error
                                     if (password.length() < 6) {
