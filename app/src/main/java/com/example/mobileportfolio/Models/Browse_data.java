@@ -2,15 +2,18 @@ package com.example.mobileportfolio.Models;
 
 public class Browse_data {
 
-    private String title, genre, year;
+    private String title, category, image, docid,discrip;
 
     public Browse_data() {
     }
 
-    public Browse_data(String title, String genre, String year) {
+    public Browse_data(String title, String category, String image, String docid,String discrip) {
         this.title = title;
-        this.genre = genre;
-        this.year = year;
+        this.category = category;
+        this.image = image;
+        this.docid = docid;
+        this.discrip = discrip;
+
     }
 
     public String getTitle() {
@@ -21,19 +24,35 @@ public class Browse_data {
         this.title = name;
     }
 
-    public String getYear() {
-        return year;
+    public String getcategory() {
+        return category;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setcategory(String category) {
+        this.category = category;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getimage() {
+        return image;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setimage(String image) {
+        this.image = image;
+    }
+
+    public String getdocid() {
+        return docid;
+    }
+
+    public void setdiscrip(String docid) {
+        this.docid = docid;
+    }
+
+    public String getdiscrip() {
+        return discrip;
+    }
+
+    public void setdocid(String discrip) {
+        this.docid = discrip;
     }
 }

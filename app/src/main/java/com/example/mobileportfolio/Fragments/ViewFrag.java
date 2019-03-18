@@ -22,7 +22,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -39,60 +41,29 @@ import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 
 public class ViewFrag extends Fragment {
-//    private static final int RESULT_LOAD_IMAGE = 1;
-//    private static final String TAG = "Image View";
-//    private static int REQUEST_TAKE_PHOTO = 1;
-//    private static final int CAMERA_REQUEST = 1;
-//    private static final int MY_CAMERA_PERMISSION_CODE = 100;
-//    String mCurrentPhotoPath;
-//
-//    private ImageView image_main;
-//    public Button capture, gallery_select;
+    String Id,Title,Discrip,Cat;
+    EditText inputTitle,inputDisc,inputCat;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_view, container, false);
-//
-//        image_main = (ImageView) view.findViewById(R.id.imageView2);
-//        capture = (Button) view.findViewById(R.id.btn_capture11);
-//        gallery_select = (Button) view.findViewById(R.id.gallery_selecction_btn);
-//        Picasso.get().load("http://i.imgur.com/DvpvklR.png").into(image_main);
-//
-//        capture.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        View v = inflater.inflate(R.layout.fragment_view, container, false);
+        inputTitle = (EditText) v.findViewById(R.id.txt_title);
+        inputDisc = (EditText) v.findViewById(R.id.txt_discription);
+        inputCat = (EditText) v.findViewById(R.id.txt_category);
 
-//                int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
-//                        Manifest.permission.CAMERA);
-//                if (permissionCheck== PackageManager.PERMISSION_DENIED) {
-//                    requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
-//
-//                if (ContextCompat.checkSelfPermission( getActivity().getApplicationContext(),Manifest.permission.CAMERA)
-//                        != PackageManager.PERMISSION_GRANTED) {
-//                    requestPermissions(new String[]{Manifest.permission.CAMERA},
-//                            MY_CAMERA_PERMISSION_CODE);
-//                } else {
-//                dispatchTakePictureIntent();
-//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                //  if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-//                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-//
-//                // }
-//                // }
-//            }
-//        });
-//        gallery_select.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(
-//                        Intent.ACTION_PICK,
-//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//                startActivityForResult(i, RESULT_LOAD_IMAGE);
-//            }
-//        });
-        return view;
+
+
+            Title = getArguments().getString("adTitle");
+            Discrip = getArguments().getString("addiscrip");
+            Cat = getArguments().getString("adCategory");
+
+
+        inputTitle.setText(Title);
+        inputDisc.setText(Discrip);
+        inputCat.setText(Cat);
+
+        return v;
 
 
     }

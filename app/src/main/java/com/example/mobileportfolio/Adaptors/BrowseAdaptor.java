@@ -1,6 +1,7 @@
 package com.example.mobileportfolio.Adaptors;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.example.mobileportfolio.Fragments.Browse;
+import com.example.mobileportfolio.Fragments.ViewFrag;
+import com.example.mobileportfolio.MainActivity;
 import com.example.mobileportfolio.Models.Browse_data;
 import com.example.mobileportfolio.R;
 
@@ -19,7 +23,8 @@ import java.util.List;
 
 public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder> {
     private List<Browse_data> myDataset;
-   // private FragmentManager fm;
+    private FragmentManager fm;
+    private Context context;
 
 
     // Provide a reference to the views for each data item
@@ -38,9 +43,10 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public BrowseAdaptor(List<Browse_data> myDataset) {
+    public BrowseAdaptor(List<Browse_data> myDataset, Context context) {
 
         this.myDataset = myDataset;
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
@@ -62,29 +68,43 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        Browse_data Browse_data = myDataset.get(position);
+        final Browse_data Browse_data = myDataset.get(position);
         holder.title.setText(Browse_data.getTitle());
-        holder.year.setText(Browse_data.getYear());
+        holder.year.setText(Browse_data.getcategory());
+        final String id = Browse_data.getdocid();
+        final String title = Browse_data.getTitle();
+        final String category = Browse_data.getcategory();
+        final String discrip = Browse_data.getdiscrip();
 
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Log.d("Doc", "AsfDSfsfjdsfkjdsfgkjDSfgdsfdsfdsgfs");
+//                FragmentManager manager = ((MainActivity)context).getSupportFragmentManager();
+//                FragmentTransaction transaction = manager.beginTransaction();
+//                transaction.replace(R.id.browse, ViewFrag);
+//                transaction.commit();
+                editClassifiedAd(id,title,category,discrip);
             }
         });
 
     }
-//    private void editClassifiedAd(String adId){
-//        FragmentManager fm = ((ClassifiedsActivity)context).getSupportFragmentManager();
-//
-//        Bundle bundle=new Bundle();
-//        bundle.putString("adId", adId);
-//
-//        AddClassifiedFragment addFragment = new AddClassifiedFragment();
-//        addFragment.setArguments(bundle);
-//
-//        fm.beginTransaction().replace(R.id.adds_frame, addFragment).commit();
-//    }
+    private void editClassifiedAd(String adId, String Title, String Category,String discrip){
+        FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();;
+
+      Bundle bundle=new Bundle();
+       bundle.putString("adId", adId);
+        bundle.putString("adTitle", Title);
+        bundle.putString("adCategory", Category);
+        bundle.putString("addiscrip", discrip);
+
+
+        ViewFrag addFragment = new ViewFrag();
+       addFragment.setArguments(bundle);
+
+        fm.beginTransaction().replace(R.id.flContent, addFragment).commit();
+    }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

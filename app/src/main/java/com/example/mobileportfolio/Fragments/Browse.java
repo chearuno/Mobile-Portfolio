@@ -1,29 +1,22 @@
 package com.example.mobileportfolio.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
 
 import com.example.mobileportfolio.Adaptors.BrowseAdaptor;
-import com.example.mobileportfolio.Adaptors.ItemData;
 import com.example.mobileportfolio.Models.Browse_data;
 import com.example.mobileportfolio.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -40,6 +33,7 @@ public class Browse extends Fragment {
     private BrowseAdaptor mAdapter;
     FirebaseFirestore db;
     FirebaseStorage storage;
+    private Context context;
 
     AVLoadingIndicatorView avi;
 
@@ -53,7 +47,7 @@ public class Browse extends Fragment {
 //        getActivity().setSupportActionBar(toolbar);
         avi =view.findViewById(R.id.avi);
 
-        prepareMovieData();
+
         setDinner();
         db = FirebaseFirestore.getInstance();
 
@@ -63,16 +57,7 @@ public class Browse extends Fragment {
 
     }
 
-    private void prepareMovieData() {
-        Browse_data data = new Browse_data("Mad Max: Fury Road", "Action & Adventure", "2015");
-        myDataset.add(data);
 
-        data = new Browse_data("Inside Out", "Animation, Kids & Family", "2015");
-        myDataset.add(data);
-        // mAdapter.notifyDataSetChanged();
-
-
-    }
 
     private void setDinner() {
          avi.show();
@@ -91,9 +76,13 @@ public class Browse extends Fragment {
 
                                 String Title = document.getString("Title");
                                 String Category = document.getString("Category");
+                                String image = document.getString("image");
+                                String Docid = document.getId();
+                                String discrip = document.getString("Discription");
 
 
-                                Browse_data data = new Browse_data(Title, "Action & Adventure", Category);
+
+                                Browse_data data = new Browse_data(Title, Category,image,Docid,discrip);
                                 myDataset.add(data);
                             }
                             addToAdapter();
@@ -108,7 +97,7 @@ public class Browse extends Fragment {
     }
 
     private void addToAdapter() {
-        mAdapter = new BrowseAdaptor(myDataset);
+        mAdapter = new BrowseAdaptor(myDataset, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
 
