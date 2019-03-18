@@ -27,6 +27,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.mobileportfolio.MainActivity;
+import com.example.mobileportfolio.Models.ItemData;
 import com.example.mobileportfolio.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,8 +51,10 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -59,6 +62,7 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class Add extends Fragment {
+    public List<ItemData> myDataset = new ArrayList<>();
     private static final String TAG = "Fire base";
     private EditText inputTitle, inputCat, inputDisc;
     private Button btnSave;

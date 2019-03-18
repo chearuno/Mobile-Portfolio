@@ -2,17 +2,20 @@ package com.example.mobileportfolio.Models;
 
 public class Browse_data {
 
-    private String title, category, image, docid,discrip;
+    private String title, category, image, docid, discrip, imageuri;
 
     public Browse_data() {
     }
 
-    public Browse_data(String title, String category, String image, String docid,String discrip) {
+
+
+    public Browse_data(String title, String category, String image, String docid,String discrip,String imageuri) {
         this.title = title;
         this.category = category;
         this.image = image;
         this.docid = docid;
         this.discrip = discrip;
+        this.imageuri = imageuri;
 
     }
 
@@ -20,8 +23,8 @@ public class Browse_data {
         return title;
     }
 
-    public void setTitle(String name) {
-        this.title = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getcategory() {
@@ -54,5 +57,13 @@ public class Browse_data {
 
     public void setdocid(String discrip) {
         this.docid = discrip;
+    }
+
+    public String geturi() {
+        return imageuri;
+    }
+
+    public void seturi(String imageuri) {
+        this.imageuri = imageuri;
     }
 }

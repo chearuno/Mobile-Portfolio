@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -18,6 +19,7 @@ import com.example.mobileportfolio.Fragments.ViewFrag;
 import com.example.mobileportfolio.MainActivity;
 import com.example.mobileportfolio.Models.Browse_data;
 import com.example.mobileportfolio.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -27,18 +29,21 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
     private Context context;
 
 
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView title, year, genre;
+        public ImageView tumbnail;
         // public View layout;
 
         public ViewHolder(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.tite_text);
             year = (TextView) v.findViewById(R.id.category_text);
+            tumbnail = (ImageView) v.findViewById(R.id.signal_level_image);
         }
     }
 
@@ -69,6 +74,9 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final Browse_data Browse_data = myDataset.get(position);
+        Picasso.get()
+                .load(Browse_data.getimage())
+                .into(holder.tumbnail);
         holder.title.setText(Browse_data.getTitle());
         holder.year.setText(Browse_data.getcategory());
         final String id = Browse_data.getdocid();
