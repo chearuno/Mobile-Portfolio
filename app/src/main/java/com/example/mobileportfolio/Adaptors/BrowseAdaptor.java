@@ -25,7 +25,7 @@ import java.util.List;
 
 public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder> {
     private List<Browse_data> myDataset;
-    private FragmentManager fm;
+
     private Context context;
 
 
@@ -104,7 +104,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 
     }
     private void toViewFrag(String adId, String Title, String Category,String discrip, String imageuRI){
-        FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();;
+        FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();
 
       Bundle bundle=new Bundle();
        bundle.putString("adId", adId);

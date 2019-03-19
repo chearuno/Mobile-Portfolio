@@ -17,9 +17,11 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 
 import com.example.mobileportfolio.Fragments.Browse;
+import com.example.mobileportfolio.Fragments.Category;
 import com.example.mobileportfolio.Fragments.MyArts;
 import com.example.mobileportfolio.Fragments.Profile;
 import com.example.mobileportfolio.Fragments.Add;
+import com.example.mobileportfolio.Fragments.Welcome;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.flContent, new Browse());
+        mFragmentTransaction.replace(R.id.flContent, new Welcome());
         mFragmentTransaction.commit();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -162,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.profile:
                 fragmentClass = Profile.class;
+                break;
+            case R.id.catogery:
+                fragmentClass = Category.class;
                 break;
 
 

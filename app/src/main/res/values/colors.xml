@@ -6,7 +6,7 @@
 
     <color name="errorMessageRed">#ff0000</color>
 
-    <color name="bg_login">#26ae90</color>
+    <color name="bg_login">#FFFFFF</color>
     <color name="bg_register">#2e3237</color>
     <color name="bg_main">#428bca</color>
     <color name="white">#ffffff</color>

@@ -135,14 +135,14 @@ public class Add extends Fragment {
                 Float Rating = inputRate.getRating();
                 String imageId = UUID.randomUUID().toString();
 
-                Map<String, Object> city = new HashMap<>();
-                city.put("Title", Title);
-                city.put("UID", currentFirebaseUser);
-                city.put("Category", Category);
-                city.put("Discription", Discription);
-                city.put("Rating", Rating);
-                city.put("date", new Timestamp(new Date()));
-                city.put("image", imageId);
+                Map<String, Object> get_data = new HashMap<>();
+                get_data.put("Title", Title);
+                get_data.put("UID", currentFirebaseUser);
+                get_data.put("Category", Category);
+                get_data.put("Discription", Discription);
+                get_data.put("Rating", Rating);
+                get_data.put("date", new Timestamp(new Date()));
+                get_data.put("image", imageId);
                 StorageReference ref = storageReference.child("images/" + imageId);
                 ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
@@ -169,7 +169,7 @@ public class Add extends Fragment {
 
 
                 db.collection("Main_data").document()
-                        .set(city)
+                        .set(get_data)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -187,7 +187,7 @@ public class Add extends Fragment {
                             }
                         });
 
-            }
+    }
         });
         inputCat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,32 +221,14 @@ public class Add extends Fragment {
 
     }
 
-
+    //
     private void catagorylist() {
-       //final CharSequence[] items1 = {"Nature", "macro", "Potrait", "Landscape", "Arts", "mobile Capure", "Test 1"};
-        final ArrayList<String> items = new ArrayList<String>();
-
-//        for(ItemData temp : CatItems){
-//            items.add(temp.getname());
-//        }
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select Catogary");
 
-        builder.setSingleChoiceItems((ListAdapter) items, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String che = items.get(which);
-                inputCat.setText(che);
-            }
-        });
-//        builder.setSingleChoiceItems(items1, -1, new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int item) {
-//                inputCat.setText(CatItems.get(item).getname());
-//
-//                dialog.dismiss();
-//            }
-//        });
+
+
         builder.show();
     }
 

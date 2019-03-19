@@ -8,7 +8,8 @@
     <item android:id="@+id/addupload" android:title="Add / Upload" android:icon="@drawable/upload_bw"/>
     <item android:id="@+id/myarts" android:title="My Arts" android:icon="@drawable/myarts_bw"/>
     <item android:id="@+id/profile" android:title="Profile" android:icon="@drawable/profile_bw"/>
-    <item android:id="@+id/logout" android:title="Log Out" android:icon="@drawable/logout_bw"/>
+    <item android:id="@+id/catogery" android:title="Catogary" android:icon="@drawable/catagorymanager_icon"/>
+
     </group>
 
 
