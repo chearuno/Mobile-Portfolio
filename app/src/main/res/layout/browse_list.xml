@@ -45,9 +45,9 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/signal_level_image"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:id="@+id/photo_thumb"
+        android:layout_width="70dp"
+        android:layout_height="56dp"
         android:layout_gravity="center"
         android:layout_weight=".30"
         android:gravity="center"

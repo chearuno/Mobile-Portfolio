@@ -110,11 +110,11 @@ public class Browse extends Fragment {
 
                                 Log.d("Doc", document.getId() + " => " + document.getData());
 
-                                String Title = document.getString("Title");
-                                String Category = document.getString("Category");
-                                String image = document.getString("image");
-                                String Docid = document.getId();
-                                String discrip = document.getString("Discription");
+                                final  String Title = document.getString("Title");
+                                final String Category = document.getString("Category");
+                                final String image = document.getString("image");
+                                final String Docid = document.getId();
+                                final String discrip = document.getString("Discription");
 
                                 StorageReference storageRef = storage.getReference();
                                 StorageReference downloadRef = storageRef.child("images/"+image);
@@ -123,7 +123,10 @@ public class Browse extends Fragment {
                                     public void onSuccess(Uri uri) {
                                         Log.d("Doc1",  " => " + uri);
                                         String asd = uri.toString();
-                                       // return asd;
+                                       //return asd;
+                                        Browse_data data = new Browse_data(Title, Category, image, Docid, discrip,asd);
+                                        myDataset.add(data);
+                                        addToAdapter();
 
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -133,11 +136,8 @@ public class Browse extends Fragment {
                                     }
                                 });
 
-
-                                Browse_data data = new Browse_data(Title, Category, image, Docid, discrip,imageuri);
-                                myDataset.add(data);
                             }
-                            addToAdapter();
+
 
                         } else {
                             Log.d("Doc", "Error getting documents: ", task.getException());
@@ -164,7 +164,7 @@ public class Browse extends Fragment {
 
     }
 
-    private void addToAdapter() {
+    public void addToAdapter() {
         mAdapter = new BrowseAdaptor(myDataset, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);

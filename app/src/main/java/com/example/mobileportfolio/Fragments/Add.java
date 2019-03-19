@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -62,7 +63,7 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class Add extends Fragment {
-    public List<ItemData> myDataset = new ArrayList<>();
+    public List<ItemData> CatItems = new ArrayList<>();
     private static final String TAG = "Fire base";
     private EditText inputTitle, inputCat, inputDisc;
     private Button btnSave;
@@ -99,7 +100,20 @@ public class Add extends Fragment {
         image_main = (ImageView) v.findViewById(R.id.imageView5);
         avi = v.findViewById(R.id.avi);
 
-        Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").into(image_main);
+        Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
+
+                .placeholder(R.drawable.iconsloadpng).resize(50, 50)
+                .error(R.drawable.errorcloud).resize(50, 50)
+        .into(image_main);
+
+        CatItems = new ArrayList<>();
+        ItemData data = new ItemData("Nature");
+        CatItems.add(data);
+        data = new ItemData("macro");
+        CatItems.add(data);
+        data = new ItemData("Potrait");
+        CatItems.add(data);
+
 
         db = FirebaseFirestore.getInstance();
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -209,19 +223,30 @@ public class Add extends Fragment {
 
 
     private void catagorylist() {
-        final CharSequence[] items = {"Nature", "macro", "Potrait", "Landscape", "Arts", "mobile Capure", "Test 1"};
+       //final CharSequence[] items1 = {"Nature", "macro", "Potrait", "Landscape", "Arts", "mobile Capure", "Test 1"};
+        final ArrayList<String> items = new ArrayList<String>();
 
+//        for(ItemData temp : CatItems){
+//            items.add(temp.getname());
+//        }
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select Catogary");
 
-        builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                inputCat.setText(items[item]);
-
-                dialog.dismiss();
+        builder.setSingleChoiceItems((ListAdapter) items, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String che = items.get(which);
+                inputCat.setText(che);
             }
         });
+//        builder.setSingleChoiceItems(items1, -1, new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int item) {
+//                inputCat.setText(CatItems.get(item).getname());
+//
+//                dialog.dismiss();
+//            }
+//        });
         builder.show();
     }
 

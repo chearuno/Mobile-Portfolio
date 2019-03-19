@@ -43,7 +43,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
             super(v);
             title = (TextView) v.findViewById(R.id.tite_text);
             year = (TextView) v.findViewById(R.id.category_text);
-            tumbnail = (ImageView) v.findViewById(R.id.signal_level_image);
+            tumbnail = (ImageView) v.findViewById(R.id.photo_thumb);
         }
     }
 
@@ -75,7 +75,11 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
         // - replace the contents of the view with that element
         final Browse_data Browse_data = myDataset.get(position);
         Picasso.get()
-                .load(Browse_data.getimage())
+                .load(Browse_data.geturi())
+                .resize(200, 100)
+               .centerInside()
+                .placeholder(R.drawable.iconsloadpng)
+                .error(R.drawable.errorcloud)
                 .into(holder.tumbnail);
         holder.title.setText(Browse_data.getTitle());
         holder.year.setText(Browse_data.getcategory());
@@ -83,6 +87,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
         final String title = Browse_data.getTitle();
         final String category = Browse_data.getcategory();
         final String discrip = Browse_data.getdiscrip();
+        final String imageURI = Browse_data.geturi();
 
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,12 +98,12 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 //                FragmentTransaction transaction = manager.beginTransaction();
 //                transaction.replace(R.id.browse, ViewFrag);
 //                transaction.commit();
-                editClassifiedAd(id,title,category,discrip);
+                toViewFrag(id,title,category,discrip,imageURI);
             }
         });
 
     }
-    private void editClassifiedAd(String adId, String Title, String Category,String discrip){
+    private void toViewFrag(String adId, String Title, String Category,String discrip, String imageuRI){
         FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();;
 
       Bundle bundle=new Bundle();
@@ -106,12 +111,13 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
         bundle.putString("adTitle", Title);
         bundle.putString("adCategory", Category);
         bundle.putString("addiscrip", discrip);
+        bundle.putString("URI", imageuRI);
 
 
         ViewFrag addFragment = new ViewFrag();
        addFragment.setArguments(bundle);
 
-        fm.beginTransaction().replace(R.id.flContent, addFragment).commit();
+        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
     }
 
     // Return the size of your dataset (invoked by the layout manager)
