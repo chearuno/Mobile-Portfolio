@@ -155,47 +155,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
+                    android:layout_marginBottom="50dp"
                     android:layout_weight="1"
                     android:numStars="5"
+                    android:paddingBottom="10dp"
                     android:progressBackgroundTint="@color/colorPrimaryDark" />
-
-
-
-
-
-                    <Button
-
-                        android:id="@+id/btn_update"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimaryDark"
-                        android:text="Update"
-                        android:layout_margin="10dp"
-                        android:textColor="@android:color/white" />
-
-
-
-
-                    <Button
-
-                        android:id="@+id/btn_delete"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimaryDark"
-                        android:text="Delete"
-                        android:layout_margin="10dp"
-                        android:textColor="@android:color/white" />
-
-                <Button
-
-                    android:id="@+id/btn_add"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"
-                    android:text="add"
-                    android:layout_margin="10dp"
-                    android:textColor="@android:color/white" />
 
 
             </LinearLayout>
@@ -203,5 +167,36 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="1dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
+
+        <Button
+
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="add"
+            android:textColor="@android:color/white" />
+
+        <Button
+
+            android:id="@+id/btn_delte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="delete"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
 </RelativeLayout>

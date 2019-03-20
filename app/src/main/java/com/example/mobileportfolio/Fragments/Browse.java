@@ -5,14 +5,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.Toast;
 
 import com.example.mobileportfolio.Adaptors.BrowseAdaptor;
@@ -37,6 +41,7 @@ import java.util.List;
 
 public class Browse extends Fragment {
     public List<Browse_data> myDataset = new ArrayList<>();
+    public List<Browse_data> myDatasetfilter;
     private RecyclerView recyclerView;
     private BrowseAdaptor mAdapter;
     FirebaseFirestore db;
@@ -53,48 +58,38 @@ public class Browse extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().setTitle("Browse");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
 //        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 //        getActivity().setSupportActionBar(toolbar);
         avi = view.findViewById(R.id.avi);
+        setHasOptionsMenu(true);
 
-
-        setDinner();
+        setDatalist();
         db = FirebaseFirestore.getInstance();
 
 
         storage = FirebaseStorage.getInstance();
 
-//        File fileNameOnDevice = new File(DOWNLOAD_DIR + "/" + "33b155d6-842f-45b9-a632-2126cc888fd9");
-//
-//        downloadRef.getFile(fileNameOnDevice).addOnSuccessListener(
-//                new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-//                        Log.d("File RecylerView", "downloaded the file");
-////                        Toast.makeText(context,
-////                                "Downloaded the file",
-////                                Toast.LENGTH_SHORT).show();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                Log.e("File RecylerView", "Failed to download the file");
-////                Toast.makeText(context,
-////                        "Couldn't be downloaded",
-////                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_browseData);
         return view;
 
     }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbarmenu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-
-    private void setDinner() {
+    private void setDatalist() {
         avi.show();
         db = FirebaseFirestore.getInstance();
         // DocumentReference docRef = db.collection("xxx").document("sf");
@@ -110,21 +105,21 @@ public class Browse extends Fragment {
 
                                 Log.d("Doc", document.getId() + " => " + document.getData());
 
-                                final  String Title = document.getString("Title");
+                                final String Title = document.getString("Title");
                                 final String Category = document.getString("Category");
                                 final String image = document.getString("image");
                                 final String Docid = document.getId();
                                 final String discrip = document.getString("Discription");
 
                                 StorageReference storageRef = storage.getReference();
-                                StorageReference downloadRef = storageRef.child("images/"+image);
+                                StorageReference downloadRef = storageRef.child("images/" + image);
                                 downloadRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        Log.d("Doc1",  " => " + uri);
+                                        Log.d("Doc1", " => " + uri);
                                         String asd = uri.toString();
-                                       //return asd;
-                                        Browse_data data = new Browse_data(Title, Category, image, Docid, discrip,asd);
+                                        //return asd;
+                                        Browse_data data = new Browse_data(Title, Category, image, Docid, discrip, asd);
                                         myDataset.add(data);
                                         addToAdapter();
 
@@ -144,24 +139,6 @@ public class Browse extends Fragment {
                         }
                     }
                 });
-
-//        islandRef = storageRef.child("images/island.jpg");
-//
-//        File localFile = File.createTempFile("images", "jpg");
-//
-//        islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-//                // Local temp file has been created
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//            }
-//        });
-
-
     }
 
     public void addToAdapter() {

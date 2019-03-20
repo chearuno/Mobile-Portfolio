@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,22 +32,18 @@ import android.widget.Toast;
 import com.example.mobileportfolio.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import static android.app.Activity.RESULT_OK;
-import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 
 public class ViewFrag extends Fragment {
-    String Id,Title,Discrip,Cat,imageUri;
-    EditText inputTitle,inputDisc,inputCat;
+    String Id, Title, Discrip, Cat, imageUri;
+    EditText inputTitle, inputDisc, inputCat;
     private ImageView image_view;
+    private Button add,deleteB;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().setTitle("View Image");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_view, container, false);
         inputTitle = (EditText) v.findViewById(R.id.txt_title);
@@ -54,12 +51,19 @@ public class ViewFrag extends Fragment {
         inputCat = (EditText) v.findViewById(R.id.txt_category);
         image_view = (ImageView) v.findViewById(R.id.imageView5);
 
+        add = (Button) v.findViewById(R.id.btn_add);
+        add.setVisibility(v.GONE);
 
+        deleteB = (Button) v.findViewById(R.id.btn_delte);
+        deleteB.setVisibility(v.GONE);
+        inputTitle.setFocusable(false);
+        inputDisc.setFocusable(false);
+        inputCat.setFocusable(false);
 
-            Title = getArguments().getString("adTitle");
-            Discrip = getArguments().getString("addiscrip");
-            Cat = getArguments().getString("adCategory");
-            imageUri = getArguments().getString("URI");
+        Title = getArguments().getString("adTitle");
+        Discrip = getArguments().getString("addiscrip");
+        Cat = getArguments().getString("adCategory");
+        imageUri = getArguments().getString("URI");
 
 
         inputTitle.setText(Title);

@@ -1,47 +1,36 @@
 package com.example.mobileportfolio.Fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
-import com.example.mobileportfolio.MainActivity;
-import com.example.mobileportfolio.Models.ItemData;
+import com.example.mobileportfolio.LoginActivity;
 import com.example.mobileportfolio.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,42 +43,35 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class Add extends Fragment {
-    private List<ItemData> catList;
-    //List list = new ArrayList();
-    private static final String TAG = "Fire base";
-    private EditText inputTitle, inputCat, inputDisc;
-    private Button btnSave;
-    private RatingBar inputRate;
-    private ImageView image_main;
-    String currentFirebaseUser;
-    private DatabaseReference dbRef;
-    private FirebaseDatabase mFirebaseInstance;
-    // private Firebase mRootRef;
+public class Update_MyArts extends Fragment {
+    private Button save, delete;
+    String Id, Title, Discrip, Cat, imageUri;
+    EditText inputTitle, inputDisc, inputCat;
+    private ImageView image_view;
     FirebaseFirestore db;
+    AVLoadingIndicatorView avi;
+    private Context context;
+    String currentFirebaseUser, catname, mydocid;
     FirebaseStorage storage;
     StorageReference storageReference;
-
+    private Uri filePath;
+    private RatingBar inputRate;
+    private String selection = "";
     private static final int RESULT_LOAD_IMAGE = 1;
     private static int REQUEST_TAKE_PHOTO = 1;
     private static final int CAMERA_REQUEST = 1;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     String mCurrentPhotoPath;
-    private Uri filePath;
-    boolean isImageFitToScreen;
-    private String selection = "";
-    AVLoadingIndicatorView avi;
+    private static final String TAG = "Fire base";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,20 +79,7 @@ public class Add extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_view, container, false);
 
-
-        btnSave = (Button) v.findViewById(R.id.btn_add);
-        inputTitle = (EditText) v.findViewById(R.id.txt_title);
-        inputCat = (EditText) v.findViewById(R.id.txt_category);
-        inputDisc = (EditText) v.findViewById(R.id.txt_discription);
-        inputRate = (RatingBar) v.findViewById(R.id.ratingBar);
-        image_main = (ImageView) v.findViewById(R.id.imageView5);
-        avi = v.findViewById(R.id.avi);
-
-        Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
-                .placeholder(R.drawable.iconsloadpng).resize(50, 50)
-                .error(R.drawable.errorcloud)
-                .into(image_main);
-
+        getActivity().setTitle("Update MyArts");
 
         db = FirebaseFirestore.getInstance();
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -118,22 +87,56 @@ public class Add extends Fragment {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        inputTitle = (EditText) v.findViewById(R.id.txt_title);
+        inputDisc = (EditText) v.findViewById(R.id.txt_discription);
+        inputCat = (EditText) v.findViewById(R.id.txt_category);
+        image_view = (ImageView) v.findViewById(R.id.imageView5);
+        inputRate = (RatingBar) v.findViewById(R.id.ratingBar);
+
+        save = (Button) v.findViewById(R.id.btn_add);
+        delete = (Button) v.findViewById(R.id.btn_delte);
+
+        avi = v.findViewById(R.id.avi);
+       // avi.hide();
+        save.setText("Update");
+
+        Title = getArguments().getString("adTitlemy");
+        Discrip = getArguments().getString("addiscripmy");
+        Cat = getArguments().getString("adCategorymy");
+        imageUri = getArguments().getString("URImy");
+        mydocid = getArguments().getString("adIdmy");
+
+        inputTitle.setText(Title);
+        inputDisc.setText(Discrip);
+        inputCat.setText(Cat);
+        Picasso.get()
+                .load(imageUri)
+                .resize(640, 480)
+                .centerInside()
+                .placeholder(R.drawable.iconsloadpng)
+                .error(R.drawable.errorcloud)
+                .into(image_view);
+
+        delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager inputManager = (InputMethodManager)
-                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                alertsignout();
+            }
 
-                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+        });
 
-                if (inputTitle != null && filePath == null) {
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (inputTitle == null) {
                     Toast.makeText(getActivity(), "Title, Category fields and image should be add..", Toast.LENGTH_LONG).show();
                 } else {
                     final ProgressDialog progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setTitle("Uploading...");
                     progressDialog.show();
-                   progressDialog .setCancelable(false);
+                    progressDialog .setCancelable(false);
 
 
                     String Title = inputTitle.getText().toString();
@@ -159,7 +162,7 @@ public class Add extends Fragment {
                             Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
                                     .placeholder(R.drawable.iconsloadpng).resize(50, 50)
                                     .error(R.drawable.errorcloud)
-                                    .into(image_main);
+                                    .into(image_view);
                             filePath = null;
 
                         }
@@ -216,7 +219,7 @@ public class Add extends Fragment {
             }
         });
 
-        image_main.setOnClickListener(new View.OnClickListener() {
+        image_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 camOrstorage();
@@ -225,7 +228,7 @@ public class Add extends Fragment {
 
         });
 
-        image_main.setOnLongClickListener(new View.OnLongClickListener() {
+        image_view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 //   camOrstorage();
@@ -235,14 +238,9 @@ public class Add extends Fragment {
 
 
         });
-
         return v;
 
-    }
-
-
-    //
-    private void catagorylist() {
+    } private void catagorylist() {
         // retrieveValuesFromListMethod1(list);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -313,7 +311,7 @@ public class Add extends Fragment {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), filePath);
-                image_main.setImageBitmap(bitmap);
+                image_view.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -357,20 +355,74 @@ public class Add extends Fragment {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 Log.i(TAG, "Got here: " + Uri.fromFile(photoFile));
-               // startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                // startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 Log.i(TAG, "Picture successfully saved: " + takePictureIntent);
             }
         }
         getActivity();
     }
 
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);
-        Log.e("gallery ", "saved");
+    public void alertsignout() {
+        AlertDialog.Builder alertDialog2 = new
+                AlertDialog.Builder(
+                getActivity());
+
+        // Setting Dialog Title
+        alertDialog2.setTitle("Confirm Delete");
+
+        // Setting Dialog Message
+        alertDialog2.setMessage("Are you sure you want to Delete?");
+
+        // Setting Positive "Yes" Btn
+        alertDialog2.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        deletecat();
+
+                    }
+                });
+
+        // Setting Negative "NO" Btn
+        alertDialog2.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+//                        Toast.makeText(getApplicationContext(),
+//                                "You clicked on NO", Toast.LENGTH_SHORT)
+//                                .show();
+                        dialog.cancel();
+                    }
+                });
+
+        // Showing Alert Dialog
+        alertDialog2.show();
+
+
     }
 
+    public void deletecat() {
+        avi.show();
+        db = FirebaseFirestore.getInstance();
+        // DocumentReference docRef = db.collection("xxx").document("sf");
+        // catList = new ArrayList<>();
+
+        db.collection("Main_data").document(mydocid).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firebase", "DocumentSnapshot successfully deleted!");
+                        avi.hide();
+                        FragmentManager fm = (getActivity()).getSupportFragmentManager();
+                        MyArts addFragment = new MyArts();
+                        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firebase", "Error deleting document", e);
+                    }
+                });
+    }
 }
