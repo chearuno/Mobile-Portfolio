@@ -115,8 +115,8 @@ public class Update_MyArts extends Fragment {
                 .load(imageUri)
                 .resize(640, 480)
                 .centerInside()
-                .placeholder(R.drawable.iconsloadpng)
-                .error(R.drawable.errorcloud)
+                .placeholder(R.drawable.download)
+                .error(R.drawable.error)
                 .into(image_view);
 
         delete.setOnClickListener(new View.OnClickListener() {
@@ -198,10 +198,10 @@ public class Update_MyArts extends Fragment {
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 progressDialog.dismiss();
                                 Toast.makeText(getActivity(), "Image Uploaded", Toast.LENGTH_SHORT).show();
-                                Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
-                                        .placeholder(R.drawable.iconsloadpng).resize(50, 50)
-                                        .error(R.drawable.errorcloud)
-                                        .into(image_view);
+                                Picasso.get().load(R.drawable.clickhere)
+                                        // .resize(256, 144)
+                                        .error(R.drawable.error)
+                                                 .into(image_view);
                                 filePath = null;
                                 FragmentManager fm = (getActivity()).getSupportFragmentManager();
                                 MyArts addFragment = new MyArts();

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +22,13 @@ import com.example.mobileportfolio.Models.Browse_data;
 import com.example.mobileportfolio.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder> {
     private List<Browse_data> myDataset;
+    private List<Browse_data> myDatasettFiltered;
+ //   private BrowseAdaptorListener listener;
 
     private Context context;
 
@@ -93,11 +97,6 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
             @Override
             public void onClick(View view) {
 
-                Log.d("Doc", "AsfDSfsfjdsfkjdsfgkjDSfgdsfdsfdsgfs");
-//                FragmentManager manager = ((MainActivity)context).getSupportFragmentManager();
-//                FragmentTransaction transaction = manager.beginTransaction();
-//                transaction.replace(R.id.browse, ViewFrag);
-//                transaction.commit();
                 toViewFrag(id,title,category,discrip,imageURI);
             }
         });
@@ -120,11 +119,50 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
         fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
     }
 
+
+   // @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    myDatasettFiltered = myDataset;
+                } else {
+                    List<Browse_data> filteredList = new ArrayList<>();
+                    for (Browse_data row : myDataset) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase()) || row.getcategory().contains(charSequence)) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    myDatasettFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = myDatasettFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                myDatasettFiltered = (ArrayList<Browse_data>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return myDataset.size();
     }
+
+
+
+
 
 }
 

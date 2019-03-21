@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class MyArts extends Fragment {
     private Context context;
     private String imageuri;
     String currentFirebaseUser;
+    private Button cat,grid,az;
 
     AVLoadingIndicatorView avi;
     private String DOWNLOAD_DIR = Environment.getExternalStoragePublicDirectory
@@ -68,6 +70,13 @@ public class MyArts extends Fragment {
 //        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 //        getActivity().setSupportActionBar(toolbar);
         avi = view.findViewById(R.id.avi);
+        cat = view.findViewById(R.id.button_cat);
+        grid = view.findViewById(R.id.button_grid);
+        az = view.findViewById(R.id.A_Z);
+
+        cat.setVisibility(View.GONE);
+        grid.setVisibility(View.GONE);
+        az.setVisibility(View.GONE);
         setHasOptionsMenu(true);
 
         setDatalist();
@@ -87,11 +96,11 @@ public class MyArts extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbarmenu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.toolbarmenu, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
     private void setDatalist() {
         avi.show();

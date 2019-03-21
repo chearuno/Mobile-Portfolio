@@ -94,10 +94,7 @@ public class MyitemAdaptor extends RecyclerView.Adapter<MyitemAdaptor.ViewHolder
             public void onClick(View view) {
 
                 Log.d("Doc", "AsfDSfsfjdsfkjdsfgkjDSfgdsfdsfdsgfs");
-//                FragmentManager manager = ((MainActivity)context).getSupportFragmentManager();
-//                FragmentTransaction transaction = manager.beginTransaction();
-//                transaction.replace(R.id.browse, ViewFrag);
-//                transaction.commit();
+
                 toViewFrag(id,title,category,discrip,imageURI,Imagename);
             }
         });

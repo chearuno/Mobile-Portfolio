@@ -1,5 +1,6 @@
 package com.example.mobileportfolio.Fragments;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
+//import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
+
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
 import com.example.mobileportfolio.Adaptors.BrowseAdaptor;
@@ -53,6 +58,7 @@ public class Browse extends Fragment {
     private Context context;
     private String imageuri;
     private Button btngrid;
+    private SearchView searchView;
 
     AVLoadingIndicatorView avi;
     private String DOWNLOAD_DIR = Environment.getExternalStoragePublicDirectory
@@ -92,6 +98,8 @@ public class Browse extends Fragment {
 
         }
     });
+
+
         return view;
 
     }
@@ -104,6 +112,32 @@ public class Browse extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.toolbarmenu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getActivity(), "Data", Toast.LENGTH_LONG).show();
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                Toast.makeText(getActivity(), "deleting Data", Toast.LENGTH_LONG).show();
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
     }
 
     private void setDatalist() {
@@ -144,7 +178,7 @@ public class Browse extends Fragment {
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception exception) {
-                                        // Handle any errors
+                                        Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
                                     }
                                 });
 

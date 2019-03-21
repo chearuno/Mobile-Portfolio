@@ -113,9 +113,9 @@ public class Add extends Fragment {
 
         bunDel.setVisibility(v.GONE);
 
-        Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
-                .placeholder(R.drawable.iconsloadpng).resize(50, 50)
-                .error(R.drawable.errorcloud)
+        Picasso.get().load(R.drawable.clickhere)
+               // .resize(256, 144)
+                .error(R.drawable.error)
                 .into(image_main);
 
 
@@ -165,9 +165,9 @@ public class Add extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(getActivity(), "Image Uploaded", Toast.LENGTH_SHORT).show();
-                            Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
-                                    .placeholder(R.drawable.iconsloadpng).resize(50, 50)
-                                    .error(R.drawable.errorcloud)
+                            Picasso.get().load(R.drawable.clickhere)
+                                    // .resize(256, 144)
+                                    .error(R.drawable.error)
                                     .into(image_main);
                             filePath = null;
 

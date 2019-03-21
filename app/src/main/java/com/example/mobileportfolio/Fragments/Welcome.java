@@ -8,15 +8,24 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.mobileportfolio.R;
 import com.squareup.picasso.Picasso;
 
 public class Welcome extends Fragment {
 
+
+    Animation uptodown,downtoup,uptodownspeed;
     private Button browse;
+   private ImageView iamge;
+    private TextView text;
+
 
     public ImageView oneimage ,twoimage;
     @Override
@@ -34,6 +43,16 @@ public class Welcome extends Fragment {
 //                .centerInside()
 //                .into(oneimage);
         browse = (Button) v.findViewById(R.id.button_brow);
+        iamge = (ImageView) v.findViewById(R.id.imageView3);
+        text = (TextView) v.findViewById(R.id.textView5);
+
+        uptodown = AnimationUtils.loadAnimation(getActivity(),R.anim.uptodown);
+        downtoup = AnimationUtils.loadAnimation(getActivity(),R.anim.downtoup);
+        uptodownspeed = AnimationUtils.loadAnimation(getActivity(),R.anim.uptodownspeed);
+       // l1.setAnimation(uptodown);
+        iamge.setAnimation(downtoup);
+        browse.setAnimation(uptodownspeed);
+        text.setAnimation(uptodown);
 
         browse.setOnClickListener(new View.OnClickListener() {
             @Override

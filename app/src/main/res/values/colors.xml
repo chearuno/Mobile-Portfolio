@@ -22,4 +22,6 @@
 
     <color name="contact_name">#333333</color>
     <color name="contact_number">#8c8c8c</color>
+    <color name="green">#4AB7F4C0</color>
+    <color name="mainact">#4E3AA44D</color>
 </resources>
