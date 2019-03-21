@@ -96,7 +96,7 @@ public class Update_Category extends Fragment {
                 docRef.update(cat_data).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getActivity(), "DocumentSnapshot successfully Updated!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Category successfully Updated!", Toast.LENGTH_LONG).show();
                         avi.hide();
                         inputct.setText("");
                     }
@@ -156,7 +156,8 @@ public class Update_Category extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("Firebase", "DocumentSnapshot successfully deleted!");
+                        Log.d("Firebase", "Category successfully deleted!");
+                        Toast.makeText(getActivity(), "Category successfully deleted!", Toast.LENGTH_LONG).show();
                         avi.hide();
                         FragmentManager fm = (getActivity()).getSupportFragmentManager();
                         Category addFragment = new Category();
@@ -167,6 +168,7 @@ public class Update_Category extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("Firebase", "Error deleting document", e);
+                        Toast.makeText(getActivity(), "Error deleting Category!", Toast.LENGTH_LONG).show();
                     }
                 });
     }

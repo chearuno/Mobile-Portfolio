@@ -32,8 +32,10 @@ import android.widget.Toast;
 import com.example.mobileportfolio.MainActivity;
 import com.example.mobileportfolio.Models.ItemData;
 import com.example.mobileportfolio.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,6 +46,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -70,7 +74,7 @@ public class Add extends Fragment {
     //List list = new ArrayList();
     private static final String TAG = "Fire base";
     private EditText inputTitle, inputCat, inputDisc;
-    private Button btnSave;
+    private Button btnSave,bunDel;
     private RatingBar inputRate;
     private ImageView image_main;
     String currentFirebaseUser;
@@ -99,12 +103,15 @@ public class Add extends Fragment {
 
 
         btnSave = (Button) v.findViewById(R.id.btn_add);
+        bunDel = (Button) v.findViewById(R.id.btn_delte);
         inputTitle = (EditText) v.findViewById(R.id.txt_title);
         inputCat = (EditText) v.findViewById(R.id.txt_category);
         inputDisc = (EditText) v.findViewById(R.id.txt_discription);
         inputRate = (RatingBar) v.findViewById(R.id.ratingBar);
         image_main = (ImageView) v.findViewById(R.id.imageView5);
         avi = v.findViewById(R.id.avi);
+
+        bunDel.setVisibility(v.GONE);
 
         Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
                 .placeholder(R.drawable.iconsloadpng).resize(50, 50)
@@ -117,6 +124,8 @@ public class Add extends Fragment {
         //dbRef = FirebaseDatabase.getInstance().getReference();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+
+        setCatlist();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,13 +171,14 @@ public class Add extends Fragment {
                                     .into(image_main);
                             filePath = null;
 
+
                         }
                     })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     progressDialog.dismiss();
-                                    Toast.makeText(getActivity(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Image Upload Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -187,7 +197,7 @@ public class Add extends Fragment {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     //progressDialog.dismiss();
-                                    Toast.makeText(getActivity(), "DocumentSnapshot successfully written!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Data successfully written!", Toast.LENGTH_LONG).show();
                                     inputTitle.setText("");
                                     inputCat.setText("");
                                     inputDisc.setText("");
@@ -199,7 +209,7 @@ public class Add extends Fragment {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     //progressDialog.dismiss();
-                                    Toast.makeText(getActivity(), "Error writing document", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Data writing Category", Toast.LENGTH_LONG).show();
 
                                 }
                             });
@@ -239,6 +249,37 @@ public class Add extends Fragment {
         return v;
 
     }
+    private void setCatlist() {
+        // avi.show();
+        db = FirebaseFirestore.getInstance();
+        // DocumentReference docRef = db.collection("xxx").document("sf");
+        catList = new ArrayList<>();
+
+        db.collection("Category_data")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                Log.d("Doc", document.getId() + " => " + document.getData());
+
+                                final String category = document.getString("Category");
+                                final String catid = document.getId();
+
+                                ItemData data = new ItemData(category, catid);
+                                catList.add(data);
+
+                            }
+
+
+                        } else {
+                            Log.d("Doc", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
 
     //
@@ -248,26 +289,26 @@ public class Add extends Fragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select Catogary");
 
-//        builder.setItems(catList, new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int item) {
-//                selection = (catList[item]).toString();
-//                selectType();
-//                dialog.dismiss();
-//            }
-//        });
 
+        Log.e("CAT SIZE","--> "+catList.size());
+
+        final ArrayList<String> strBrandList = new ArrayList<String>();
+        for (int i = 0; i < catList.size(); i++) {
+            strBrandList.add(catList.get(i).getname());
+        }
+
+        final CharSequence[] chars = strBrandList.toArray(new CharSequence[strBrandList.size()]);
+
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                selection = (chars[item]).toString();
+                inputCat.setText(selection);
+                dialog.dismiss();
+            }
+        });
 
         builder.show();
     }
-//    public void retrieveValuesFromListMethod1(List list)
-//    {
-//        Iterator itr = list.iterator();
-//        while(itr.hasNext())
-//        {
-//            //System.out.println(itr.next());
-//            final CharSequence[] set = {itr.next().toString()};
-//        }
-//    }
 
     private void camOrstorage() {
         final CharSequence[] items = {"Camera", "Device"};

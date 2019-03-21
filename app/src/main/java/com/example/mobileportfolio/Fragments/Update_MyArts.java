@@ -53,7 +53,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class Update_MyArts extends Fragment {
     private Button save, delete;
-    String Id, Title, Discrip, Cat, imageUri;
+    String imagename, Title, Discrip, Cat, imageUri;
     EditText inputTitle, inputDisc, inputCat;
     private ImageView image_view;
     FirebaseFirestore db;
@@ -98,7 +98,7 @@ public class Update_MyArts extends Fragment {
         delete = (Button) v.findViewById(R.id.btn_delte);
 
         avi = v.findViewById(R.id.avi);
-       // avi.hide();
+        // avi.hide();
         save.setText("Update");
 
         Title = getArguments().getString("adTitlemy");
@@ -106,6 +106,7 @@ public class Update_MyArts extends Fragment {
         Cat = getArguments().getString("adCategorymy");
         imageUri = getArguments().getString("URImy");
         mydocid = getArguments().getString("adIdmy");
+        imagename = getArguments().getString("Imagemy");
 
         inputTitle.setText(Title);
         inputDisc.setText(Discrip);
@@ -133,10 +134,11 @@ public class Update_MyArts extends Fragment {
                 if (inputTitle == null) {
                     Toast.makeText(getActivity(), "Title, Category fields and image should be add..", Toast.LENGTH_LONG).show();
                 } else {
+                    DocumentReference docRef = db.collection("Main_data").document(mydocid);
                     final ProgressDialog progressDialog = new ProgressDialog(getActivity());
                     progressDialog.setTitle("Uploading...");
                     progressDialog.show();
-                    progressDialog .setCancelable(false);
+                    progressDialog.setCancelable(false);
 
 
                     String Title = inputTitle.getText().toString();
@@ -145,67 +147,126 @@ public class Update_MyArts extends Fragment {
                     Float Rating = inputRate.getRating();
                     String imageId = UUID.randomUUID().toString();
 
-                    Map<String, Object> get_data = new HashMap<>();
-                    get_data.put("Title", Title);
-                    get_data.put("UID", currentFirebaseUser);
-                    get_data.put("Category", Category);
-                    get_data.put("Discription", Discription);
-                    get_data.put("Rating", Rating);
-                    get_data.put("date", new Timestamp(new Date()));
-                    get_data.put("image", imageId);
-                    StorageReference ref = storageReference.child("images/" + imageId);
-                    ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    Map<String, Object> get_data_with_image = new HashMap<>();
+//                    get_data_with_image.put("Title", Title);
+//                    get_data_with_image.put("Category", Category);
+//                    get_data_with_image.put("Discription", Discription);
+//                    get_data_with_image.put("Rating", Rating);
+//                    get_data_with_image.put("date", new Timestamp(new Date()));
+//                    get_data_with_image.put("image", imageId);
 
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(getActivity(), "Image Uploaded", Toast.LENGTH_SHORT).show();
-                            Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
-                                    .placeholder(R.drawable.iconsloadpng).resize(50, 50)
-                                    .error(R.drawable.errorcloud)
-                                    .into(image_view);
-                            filePath = null;
+                    Map<String, Object> get_data_only = new HashMap<>();
+                    get_data_only.put("Title", Title);
 
-                        }
-                    })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(getActivity(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                            .getTotalByteCount());
-                                    progressDialog.setMessage("Uploading..  " + (int) progress + "%");
-                                }
-                            });
+                    get_data_only.put("Category", Category);
+                    get_data_only.put("Discription", Discription);
+                    get_data_only.put("Rating", Rating);
+                    get_data_only.put("date", new Timestamp(new Date()));
 
 
-                    db.collection("Main_data").document()
-                            .set(get_data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    //progressDialog.dismiss();
-                                    Toast.makeText(getActivity(), "DocumentSnapshot successfully written!", Toast.LENGTH_LONG).show();
-                                    inputTitle.setText("");
-                                    inputCat.setText("");
-                                    inputDisc.setText("");
-                                    inputRate.setRating(0);
 
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    //progressDialog.dismiss();
-                                    Toast.makeText(getActivity(), "Error writing document", Toast.LENGTH_LONG).show();
+                    if (filePath != null) {
 
-                                }
-                            });
+
+                        StorageReference ref = storageReference.child("images/" + imagename);
+                        ref.delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("Firebase", "DocumentSnapshot successfully deleted!");
+                                        Toast.makeText(getActivity(), "Last Image successfully deleted! ", Toast.LENGTH_LONG).show();
+
+                                        avi.hide();
+//                                        FragmentManager fm = (getActivity()).getSupportFragmentManager();
+//                                        MyArts addFragment = new MyArts();
+//                                        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("Firebase", "Error deleting document", e);
+                                        Toast.makeText(getActivity(), "Error deleting Last Iamge", Toast.LENGTH_LONG).show();
+
+                                    }
+                                });
+
+
+                        ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                progressDialog.dismiss();
+                                Toast.makeText(getActivity(), "Image Uploaded", Toast.LENGTH_SHORT).show();
+                                Picasso.get().load("http://news.mit.edu/sites/mit.edu.newsoffice/files/images/2016/MIT-Earth-Dish_0.jpg").resize(50, 50)
+                                        .placeholder(R.drawable.iconsloadpng).resize(50, 50)
+                                        .error(R.drawable.errorcloud)
+                                        .into(image_view);
+                                filePath = null;
+                                FragmentManager fm = (getActivity()).getSupportFragmentManager();
+                                MyArts addFragment = new MyArts();
+                                fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
+
+                            }
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(getActivity(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                                .getTotalByteCount());
+                                        progressDialog.setMessage("Uploading..  " + (int) progress + "%");
+                                    }
+                                });
+
+                        docRef.update(get_data_only).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getActivity(), "Data successfully Updated!", Toast.LENGTH_LONG).show();
+                                avi.hide();
+
+
+                            }
+                        });
+                        docRef.update(get_data_only).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("Firebase", "Error deleting document", e);
+                                Toast.makeText(getActivity(), "Error deleting Data", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    } else {
+                        progressDialog.dismiss();
+
+                        docRef.update(get_data_only).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getActivity(), "Data successfully Updated!", Toast.LENGTH_LONG).show();
+                                avi.hide();
+                                FragmentManager fm = (getActivity()).getSupportFragmentManager();
+                                MyArts addFragment = new MyArts();
+                                fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
+
+
+                            }
+                        });
+                        docRef.update(get_data_only).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("Firebase", "Error deleting document", e);
+                                Toast.makeText(getActivity(), "Error deleting Data", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+
+                    }
 
                 }
             }
@@ -240,7 +301,9 @@ public class Update_MyArts extends Fragment {
         });
         return v;
 
-    } private void catagorylist() {
+    }
+
+    private void catagorylist() {
         // retrieveValuesFromListMethod1(list);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -357,6 +420,7 @@ public class Update_MyArts extends Fragment {
                 Log.i(TAG, "Got here: " + Uri.fromFile(photoFile));
                 // startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 Log.i(TAG, "Picture successfully saved: " + takePictureIntent);
+                Toast.makeText(getActivity(), "Picture successfully saved: " + takePictureIntent, Toast.LENGTH_LONG).show();
             }
         }
         getActivity();
@@ -404,14 +468,18 @@ public class Update_MyArts extends Fragment {
     public void deletecat() {
         avi.show();
         db = FirebaseFirestore.getInstance();
+        //imageUri = getArguments().getString("URImy");
+        StorageReference ref = storageReference.child("images/" + imagename);
         // DocumentReference docRef = db.collection("xxx").document("sf");
         // catList = new ArrayList<>();
 
-        db.collection("Main_data").document(mydocid).delete()
+        ref.delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firebase", "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(getActivity(), "Image successfully deleted! ", Toast.LENGTH_LONG).show();
+
                         avi.hide();
                         FragmentManager fm = (getActivity()).getSupportFragmentManager();
                         MyArts addFragment = new MyArts();
@@ -422,6 +490,28 @@ public class Update_MyArts extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("Firebase", "Error deleting document", e);
+                        Toast.makeText(getActivity(), "Error deleting Iamge", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+        db.collection("Main_data").document(mydocid).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firebase", "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(getActivity(), "Data successfully deleted!", Toast.LENGTH_LONG).show();
+                        avi.hide();
+//                        FragmentManager fm = (getActivity()).getSupportFragmentManager();
+//                        MyArts addFragment = new MyArts();
+//                        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firebase", "Error deleting document", e);
+                        Toast.makeText(getActivity(), "Error deleting Image", Toast.LENGTH_LONG).show();
                     }
                 });
     }

@@ -12,18 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.mobileportfolio.Fragments.Update_MyArts;
 import com.example.mobileportfolio.Fragments.ViewFrag;
 import com.example.mobileportfolio.MainActivity;
 import com.example.mobileportfolio.Models.Browse_data;
-import com.example.mobileportfolio.Models.Myarts_data;
 import com.example.mobileportfolio.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MyitemAdaptor extends RecyclerView.Adapter<MyitemAdaptor.ViewHolder> {
-    private List<Myarts_data> myDataset;
+public class BrowseGridAdaptor extends RecyclerView.Adapter<BrowseGridAdaptor.ViewHolder> {
+    private List<Browse_data> myDataset;
 
     private Context context;
 
@@ -40,14 +38,14 @@ public class MyitemAdaptor extends RecyclerView.Adapter<MyitemAdaptor.ViewHolder
 
         public ViewHolder(View v) {
             super(v);
-            title = (TextView) v.findViewById(R.id.tite_text);
-            year = (TextView) v.findViewById(R.id.category_text);
-            tumbnail = (ImageView) v.findViewById(R.id.photo_thumb);
+          // title = (TextView) v.findViewById(R.id.textView4);
+            //year = (TextView) v.findViewById(R.id.category_text);
+            tumbnail = (ImageView) v.findViewById(R.id.grid_tumb);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyitemAdaptor(List<Myarts_data> myDataset, Context context) {
+    public BrowseGridAdaptor(List<Browse_data> myDataset, Context context) {
 
         this.myDataset = myDataset;
         this.context = context;
@@ -55,41 +53,41 @@ public class MyitemAdaptor extends RecyclerView.Adapter<MyitemAdaptor.ViewHolder
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyitemAdaptor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BrowseGridAdaptor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.browse_list, parent, false);
+                .inflate(R.layout.browse_grid, parent, false);
 
-        MyitemAdaptor.ViewHolder viewHolder =
-                new MyitemAdaptor.ViewHolder(view);
+        BrowseGridAdaptor.ViewHolder viewHolder =
+                new BrowseGridAdaptor.ViewHolder(view);
         return viewHolder;
 
     }
 
     @Override
-    public void onBindViewHolder(MyitemAdaptor.ViewHolder holder, int position) {
+    public void onBindViewHolder(BrowseGridAdaptor.ViewHolder holder, int position) {
 
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final Myarts_data Browse_data = myDataset.get(position);
+        final Browse_data Browse_data = myDataset.get(position);
+
         Picasso.get()
                 .load(Browse_data.geturi())
-                .resize(200, 100)
-               .centerInside()
+                .resize(640, 480)
+               .centerCrop()
                 .placeholder(R.drawable.iconsloadpng)
                 .error(R.drawable.errorcloud)
                 .into(holder.tumbnail);
-        holder.title.setText(Browse_data.getTitle());
-        holder.year.setText(Browse_data.getcategory());
+//        holder.title.setText(Browse_data.getTitle());
+        //holder.year.setText(Browse_data.getcategory());
         final String id = Browse_data.getdocid();
         final String title = Browse_data.getTitle();
         final String category = Browse_data.getcategory();
         final String discrip = Browse_data.getdiscrip();
-        final String Imagename = Browse_data.getimage();
         final String imageURI = Browse_data.geturi();
 
-        holder.title.setOnClickListener(new View.OnClickListener() {
+        holder.tumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -98,27 +96,26 @@ public class MyitemAdaptor extends RecyclerView.Adapter<MyitemAdaptor.ViewHolder
 //                FragmentTransaction transaction = manager.beginTransaction();
 //                transaction.replace(R.id.browse, ViewFrag);
 //                transaction.commit();
-                toViewFrag(id,title,category,discrip,imageURI,Imagename);
+                toViewFrag(id,title,category,discrip,imageURI);
             }
         });
 
     }
-    private void toViewFrag(String adId, String Title, String Category,String discrip, String imageuRI, String imagename){
+    private void toViewFrag(String adId, String Title, String Category,String discrip, String imageuRI){
         FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();
 
       Bundle bundle=new Bundle();
-       bundle.putString("adIdmy", adId);
-        bundle.putString("adTitlemy", Title);
-        bundle.putString("adCategorymy", Category);
-        bundle.putString("addiscripmy", discrip);
-        bundle.putString("URImy", imageuRI);
-        bundle.putString("Imagemy", imagename);
+       bundle.putString("adId", adId);
+        bundle.putString("adTitle", Title);
+        bundle.putString("adCategory", Category);
+        bundle.putString("addiscrip", discrip);
+        bundle.putString("URI", imageuRI);
 
 
-        Update_MyArts addFragment = new Update_MyArts();
+        ViewFrag addFragment = new ViewFrag();
        addFragment.setArguments(bundle);
 
-        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
+        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -117,7 +117,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
         ViewFrag addFragment = new ViewFrag();
        addFragment.setArguments(bundle);
 
-        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack("null").commit();
+        fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
     }
 
     // Return the size of your dataset (invoked by the layout manager)

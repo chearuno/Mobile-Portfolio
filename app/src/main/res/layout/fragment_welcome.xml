@@ -16,7 +16,14 @@
         <TextView
             android:id="@+id/textView5"
             android:layout_width="match_parent"
-            android:layout_height="186dp" />
+            android:layout_height="186dp"
+            android:fontFamily="serif"
+            android:gravity="bottom|center"
+            android:paddingBottom="10dp"
+            android:text="Thousands of Artworks are waiting for you.."
+            android:textColor="@color/bg_register"
+            android:textSize="17sp"
+            android:textStyle="italic" />
 
         <Button
             android:id="@+id/button_brow"
@@ -25,7 +32,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:fontFamily="sans-serif-smallcaps"
-            android:text="Browse Now"
+            android:text="Browse Now!"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="30sp"
             android:textStyle="bold" />

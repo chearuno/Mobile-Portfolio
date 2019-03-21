@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,10 +17,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Toast;
 
 import com.example.mobileportfolio.Adaptors.BrowseAdaptor;
+import com.example.mobileportfolio.MainActivity;
 import com.example.mobileportfolio.Models.Browse_data;
 import com.example.mobileportfolio.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,6 +52,7 @@ public class Browse extends Fragment {
     StorageReference storageRef;
     private Context context;
     private String imageuri;
+    private Button btngrid;
 
     AVLoadingIndicatorView avi;
     private String DOWNLOAD_DIR = Environment.getExternalStoragePublicDirectory
@@ -63,6 +67,8 @@ public class Browse extends Fragment {
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
 //        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
 //        getActivity().setSupportActionBar(toolbar);
+
+        btngrid = (Button) view.findViewById(R.id.button_grid);
         avi = view.findViewById(R.id.avi);
         setHasOptionsMenu(true);
 
@@ -75,6 +81,17 @@ public class Browse extends Fragment {
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_browseData);
+
+        btngrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = (getActivity()).getSupportFragmentManager();
+                BrowseGrid addFragment = new BrowseGrid();
+                fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
+
+
+        }
+    });
         return view;
 
     }
@@ -136,6 +153,7 @@ public class Browse extends Fragment {
 
                         } else {
                             Log.d("Doc", "Error getting documents: ", task.getException());
+                            Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
