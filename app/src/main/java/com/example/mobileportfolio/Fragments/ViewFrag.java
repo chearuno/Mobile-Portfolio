@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.mobileportfolio.MainActivity;
 import com.example.mobileportfolio.R;
 import com.squareup.picasso.Picasso;
 
@@ -60,6 +62,8 @@ public class ViewFrag extends Fragment {
         inputDisc.setFocusable(false);
         inputCat.setFocusable(false);
 
+
+
         Title = getArguments().getString("adTitle");
         Discrip = getArguments().getString("addiscrip");
         Cat = getArguments().getString("adCategory");
@@ -76,6 +80,20 @@ public class ViewFrag extends Fragment {
                 .placeholder(R.drawable.iconsloadpng)
                 .error(R.drawable.errorcloud)
                 .into(image_view);
+
+
+        image_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = (getActivity()).getSupportFragmentManager();
+                Bundle bundle=new Bundle();
+                bundle.putString("imageURI", imageUri);
+                FullScreen addFragment = new FullScreen();
+                addFragment.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
+
+            }
+        });
 
         return v;
 

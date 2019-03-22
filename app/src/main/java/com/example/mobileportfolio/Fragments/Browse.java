@@ -49,8 +49,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class Browse extends Fragment {
+//implements BrowseAdaptor.BrowseAdaptorListener
+public class Browse extends Fragment  {
     public List<Browse_data> myDataset = new ArrayList<>();
     public List<Browse_data> myDatasetfilter;
     private RecyclerView recyclerView;
@@ -125,7 +125,7 @@ public class Browse extends Fragment {
             }
         });
 
-        showSystemUI();
+      //  showSystemUI();
 
         return view;
 
@@ -159,7 +159,7 @@ public class Browse extends Fragment {
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 selection = (chars[item]).toString();
-                // inputCat.setText(selection);
+                mAdapter.getFilter().filter(selection);
                 dialog.dismiss();
             }
         });
@@ -228,7 +228,7 @@ public class Browse extends Fragment {
             public boolean onQueryTextChange(String query) {
                 //Toast.makeText(getActivity(), "deleting Data", Toast.LENGTH_LONG).show();
                 // filter recycler view when text is changed
-               // mAdapter.getFilter().filter(query);
+               mAdapter.getFilter().filter(query);
                 return false;
             }
         });
@@ -274,7 +274,7 @@ public class Browse extends Fragment {
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception exception) {
-                                        Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
+                                     //   Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -283,7 +283,7 @@ public class Browse extends Fragment {
 
                         } else {
                             Log.d("Doc", "Error getting documents: ", task.getException());
-                            Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -301,4 +301,8 @@ public class Browse extends Fragment {
 
     }
 
+//    @Override
+//    public void onContactSelected(Contact contact) {
+//
+//    }
 }

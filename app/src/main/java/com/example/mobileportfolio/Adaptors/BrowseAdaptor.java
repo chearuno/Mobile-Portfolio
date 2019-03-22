@@ -27,11 +27,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder> implements Filterable {
+public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder> implements Filterable{
     private List<Browse_data> myDataset;
     private List<Browse_data> myDatasettFiltered;
     private BrowseAdaptor mAdapter;
- //   private BrowseAdaptorListener listener;
+// private BrowseAdaptorListener listener;
 
     private Context context;
 
@@ -59,6 +59,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 
         this.myDataset = myDataset;
         this.context = context;
+        this.myDatasettFiltered = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
@@ -80,7 +81,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        final Browse_data Browse_data = myDataset.get(position);
+        final Browse_data Browse_data = myDatasettFiltered.get(position);
         Picasso.get()
                 .load(Browse_data.geturi())
                 .resize(200, 100)
@@ -97,6 +98,14 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
         final String imageURI = Browse_data.geturi();
 
         holder.title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                toViewFrag(id,title,category,discrip,imageURI);
+            }
+        });
+
+        holder.year.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -149,7 +158,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase()) || row.getcategory().contains(charSequence)) {
+                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase()) || row.getdiscrip().contains(charSequence) || row.getcategory().contains(charSequence)) {
                             filteredList.add(row);
                         }
                     }
@@ -164,7 +173,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                myDataset = (ArrayList<Browse_data>) filterResults.values;
+                myDatasettFiltered = (ArrayList<Browse_data>) filterResults.values;
 
 
 
@@ -173,13 +182,16 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
             }
         };
     }
-    // Return the size of your dataset (invoked by the layout manager)
+
+
     @Override
     public int getItemCount() {
-        return myDataset.size();
+        return myDatasettFiltered.size();
     }
 
-
+//    public interface BrowseAdaptorListener {
+//        void onContactSelected(Contact contact);
+//    }
 
 
 

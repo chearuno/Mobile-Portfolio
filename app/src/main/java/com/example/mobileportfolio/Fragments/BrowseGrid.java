@@ -1,6 +1,7 @@
 package com.example.mobileportfolio.Fragments;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
@@ -15,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,10 +57,11 @@ public class BrowseGrid extends Fragment {
     private String imageuri;
     private Button btngrid;
     private String selection = "";
-
-    int spancout ;
+    private SearchView searchView;
+    int spancout;
     private String selectionfr;
     private String selectedgrid;
+    private Button btncat, btnaz;
 
 
     AVLoadingIndicatorView avi;
@@ -76,6 +79,8 @@ public class BrowseGrid extends Fragment {
 //        getActivity().setSupportActionBar(toolbar);
         avi = view.findViewById(R.id.avi);
         btngrid = (Button) view.findViewById(R.id.button_grid);
+        btncat = (Button) view.findViewById(R.id.button_cat);
+        btnaz = (Button) view.findViewById(R.id.A_Z);
 
         btngrid.setText("List");
         setHasOptionsMenu(true);
@@ -86,16 +91,15 @@ public class BrowseGrid extends Fragment {
 
         selectedgrid = getArguments().getString("selgrid");
 
-       if (selectedgrid == "one"){
-           spancout = 1;
-       }
-        else if (selectedgrid == "two") {
+        if (selectedgrid == "one") {
+            spancout = 1;
+        } else if (selectedgrid == "two") {
             spancout = 2;
-        }else if (selectedgrid == "three") {
-           spancout = 3;
-       }else if (selectedgrid == "four") {
-           spancout = 4;
-       }
+        } else if (selectedgrid == "three") {
+            spancout = 3;
+        } else if (selectedgrid == "four") {
+            spancout = 4;
+        }
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rvg_browseData);
 
@@ -105,7 +109,6 @@ public class BrowseGrid extends Fragment {
                 FragmentManager fm = (getActivity()).getSupportFragmentManager();
                 Browse addFragment = new Browse();
                 fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
-
 
 
             }
@@ -122,8 +125,78 @@ public class BrowseGrid extends Fragment {
 
         });
 
+        btnaz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sortnow();
+
+            }
+        });
+
+        btncat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                catagorylist();
+            }
+        });
+
         return view;
 
+    }
+
+    private void catagorylist() {
+        // retrieveValuesFromListMethod1(list);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Catogary");
+
+
+        Log.e("CAT SIZE", "--> " + myDataset.size());
+
+        final ArrayList<String> strBrandList = new ArrayList<String>();
+        for (int i = 0; i < myDataset.size(); i++) {
+            strBrandList.add(myDataset.get(i).getcategory());
+        }
+
+        final CharSequence[] chars = strBrandList.toArray(new CharSequence[strBrandList.size()]);
+
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                selection = (chars[item]).toString();
+                mAdapter.getFilter().filter(selection);
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void Sortnow() {
+        final CharSequence[] items = {"A-Z", "Z-A", "Date Asc", "Date Dsc"};
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Sort Methord");
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                selection = (items[item]).toString();
+                selectType();
+
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void selectType() {
+        if (selection == "Camera") {
+
+
+        } else {
+
+        }
     }
 
     private void gridLayout() {
@@ -149,21 +222,19 @@ public class BrowseGrid extends Fragment {
         if (selection == "One Row") {
             FragmentManager fm = (getActivity()).getSupportFragmentManager();
             selectionfr = "one";
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             bundle.putString("selgrid", selectionfr);
 
 
             BrowseGrid addFragment = new BrowseGrid();
             addFragment.setArguments(bundle);
             fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
-
-
 
 
         } else if (selection == "Two Rows") {
             FragmentManager fm = (getActivity()).getSupportFragmentManager();
             selectionfr = "two";
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             bundle.putString("selgrid", selectionfr);
 
 
@@ -172,13 +243,10 @@ public class BrowseGrid extends Fragment {
             fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
 
 
-
-
-        }
-        else if (selection == "Three Rows") {
+        } else if (selection == "Three Rows") {
             FragmentManager fm = (getActivity()).getSupportFragmentManager();
             selectionfr = "three";
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             bundle.putString("selgrid", selectionfr);
 
 
@@ -187,35 +255,61 @@ public class BrowseGrid extends Fragment {
             fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
 
 
-
-
-        }
-        else if (selection == "Four Rows") {
+        } else if (selection == "Four Rows") {
             FragmentManager fm = (getActivity()).getSupportFragmentManager();
             selectionfr = "four";
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             bundle.putString("selgrid", selectionfr);
 
 
             BrowseGrid addFragment = new BrowseGrid();
             addFragment.setArguments(bundle);
             fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
-
-
 
 
         }
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.toolbarmenu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(getActivity(), "Data", Toast.LENGTH_LONG).show();
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                //Toast.makeText(getActivity(), "deleting Data", Toast.LENGTH_LONG).show();
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
     }
+
 
     private void setDatalist() {
         avi.show();
@@ -264,7 +358,7 @@ public class BrowseGrid extends Fragment {
 
                         } else {
                             Log.d("Doc", "Error getting documents: ", task.getException());
-                            Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getActivity(), "Error getting Data", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -304,7 +398,7 @@ public class BrowseGrid extends Fragment {
 //        int spacing = 50; // 50px
 //        boolean includeEdge = false;
         mAdapter = new BrowseGridAdaptor(myDataset, getContext());
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),spancout);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), spancout);
 
         recyclerView.setLayoutManager(mLayoutManager);
 

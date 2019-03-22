@@ -150,7 +150,7 @@ public class MyArts extends Fragment {
 
                                             } else{
                                             Log.d("Doc", "Error getting documents: ", task.getException());
-                            Toast.makeText(getActivity(), "Error deleting Data", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getActivity(), "Error deleting Data", Toast.LENGTH_LONG).show();
                                         }
 
                                     }

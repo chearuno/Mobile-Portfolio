@@ -53,7 +53,7 @@ public class FullScreen extends Fragment {
                 .error(R.drawable.error)
                 .into(image_view);
 
-        fullScreen();
+      //  fullScreen();
 
 //
 
