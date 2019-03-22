@@ -1,6 +1,8 @@
 package com.example.mobileportfolio.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,10 +54,12 @@ public class BrowseGrid extends Fragment {
     private Context context;
     private String imageuri;
     private Button btngrid;
+    private String selection = "";
 
-    private int spanCount;
-    private int spacing;
-    private boolean includeEdge;
+    int spancout ;
+    private String selectionfr;
+    private String selectedgrid;
+
 
     AVLoadingIndicatorView avi;
     private String DOWNLOAD_DIR = Environment.getExternalStoragePublicDirectory
@@ -78,11 +82,20 @@ public class BrowseGrid extends Fragment {
 
         setDatalist();
         db = FirebaseFirestore.getInstance();
-
-
         storage = FirebaseStorage.getInstance();
 
+        selectedgrid = getArguments().getString("selgrid");
 
+       if (selectedgrid == "one"){
+           spancout = 1;
+       }
+        else if (selectedgrid == "two") {
+            spancout = 2;
+        }else if (selectedgrid == "three") {
+           spancout = 3;
+       }else if (selectedgrid == "four") {
+           spancout = 4;
+       }
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rvg_browseData);
 
@@ -94,10 +107,104 @@ public class BrowseGrid extends Fragment {
                 fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
 
 
+
             }
         });
+
+        btngrid.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                gridLayout();
+                return false;
+
+            }
+
+
+        });
+
         return view;
 
+    }
+
+    private void gridLayout() {
+        final CharSequence[] items = {"One Row", "Two Rows", "Three Rows", "Four Rows"};
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Grid Layout");
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                selection = (items[item]).toString();
+                selectTypegrid();
+
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void selectTypegrid() {
+        if (selection == "One Row") {
+            FragmentManager fm = (getActivity()).getSupportFragmentManager();
+            selectionfr = "one";
+            Bundle bundle=new Bundle();
+            bundle.putString("selgrid", selectionfr);
+
+
+            BrowseGrid addFragment = new BrowseGrid();
+            addFragment.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
+
+
+
+
+        } else if (selection == "Two Rows") {
+            FragmentManager fm = (getActivity()).getSupportFragmentManager();
+            selectionfr = "two";
+            Bundle bundle=new Bundle();
+            bundle.putString("selgrid", selectionfr);
+
+
+            BrowseGrid addFragment = new BrowseGrid();
+            addFragment.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
+
+
+
+
+        }
+        else if (selection == "Three Rows") {
+            FragmentManager fm = (getActivity()).getSupportFragmentManager();
+            selectionfr = "three";
+            Bundle bundle=new Bundle();
+            bundle.putString("selgrid", selectionfr);
+
+
+            BrowseGrid addFragment = new BrowseGrid();
+            addFragment.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
+
+
+
+
+        }
+        else if (selection == "Four Rows") {
+            FragmentManager fm = (getActivity()).getSupportFragmentManager();
+            selectionfr = "four";
+            Bundle bundle=new Bundle();
+            bundle.putString("selgrid", selectionfr);
+
+
+            BrowseGrid addFragment = new BrowseGrid();
+            addFragment.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
+
+
+
+
+        }
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,11 +300,11 @@ public class BrowseGrid extends Fragment {
 
 
     public void addToAdapter() {
-        int spanCount = 3; // 3 columns
-        int spacing = 50; // 50px
-        boolean includeEdge = false;
+//        int spanCount = 3; // 3 columns
+//        int spacing = 50; // 50px
+//        boolean includeEdge = false;
         mAdapter = new BrowseGridAdaptor(myDataset, getContext());
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(),spancout);
 
         recyclerView.setLayoutManager(mLayoutManager);
 

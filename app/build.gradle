@@ -39,5 +39,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.github.MikeOrtiz:TouchImageView:1.4.0'
+  // implementation 'com.github.MikeOrtiz:TouchImageView:2.1.1'
+    //implementation 'com.github.hannesa2:TouchImageView:Tag'
+
+//    implementation 'com.github.User:Repo:Tag'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.example.mobileportfolio.Fragments.Browse;
+import com.example.mobileportfolio.Fragments.FullScreen;
 import com.example.mobileportfolio.Fragments.ViewFrag;
 import com.example.mobileportfolio.MainActivity;
 import com.example.mobileportfolio.Models.Browse_data;
@@ -25,9 +27,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder> {
+public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder> implements Filterable {
     private List<Browse_data> myDataset;
     private List<Browse_data> myDatasettFiltered;
+    private BrowseAdaptor mAdapter;
  //   private BrowseAdaptorListener listener;
 
     private Context context;
@@ -101,6 +104,18 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
             }
         });
 
+        holder.tumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();
+                Bundle bundle=new Bundle();
+                bundle.putString("imageURI", imageURI);
+                FullScreen addFragment = new FullScreen();
+                addFragment.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
+            }
+        });
+
     }
     private void toViewFrag(String adId, String Title, String Category,String discrip, String imageuRI){
         FragmentManager fm = ((MainActivity)context).getSupportFragmentManager();
@@ -120,7 +135,7 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
     }
 
 
-   // @Override
+   @Override
     public Filter getFilter() {
         return new Filter() {
             @Override
@@ -149,8 +164,12 @@ public class BrowseAdaptor extends RecyclerView.Adapter<BrowseAdaptor.ViewHolder
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                myDatasettFiltered = (ArrayList<Browse_data>) filterResults.values;
-                notifyDataSetChanged();
+                myDataset = (ArrayList<Browse_data>) filterResults.values;
+
+
+
+             notifyDataSetChanged();
+
             }
         };
     }

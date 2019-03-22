@@ -1,7 +1,10 @@
 package com.example.mobileportfolio.Fragments;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -57,10 +60,11 @@ public class Browse extends Fragment {
     StorageReference storageRef;
     private Context context;
     private String imageuri;
-    private Button btngrid;
+    private Button btngrid, btncat, btnaz;
     private SearchView searchView;
-
+    private String selection = "";
     AVLoadingIndicatorView avi;
+    private String selectionfr;
     private String DOWNLOAD_DIR = Environment.getExternalStoragePublicDirectory
             (Environment.DIRECTORY_DOWNLOADS).getPath();
 
@@ -75,6 +79,8 @@ public class Browse extends Fragment {
 //        getActivity().setSupportActionBar(toolbar);
 
         btngrid = (Button) view.findViewById(R.id.button_grid);
+        btncat = (Button) view.findViewById(R.id.button_cat);
+        btnaz = (Button) view.findViewById(R.id.A_Z);
         avi = view.findViewById(R.id.avi);
         setHasOptionsMenu(true);
 
@@ -85,29 +91,116 @@ public class Browse extends Fragment {
         storage = FirebaseStorage.getInstance();
 
 
-
         recyclerView = (RecyclerView) view.findViewById(R.id.rv_browseData);
 
         btngrid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = (getActivity()).getSupportFragmentManager();
+                selectionfr = "two";
+                Bundle bundle=new Bundle();
+                bundle.putString("selgrid", selectionfr);
+
+
                 BrowseGrid addFragment = new BrowseGrid();
+                addFragment.setArguments(bundle);
                 fm.beginTransaction().replace(R.id.flContent, addFragment).addToBackStack(null).commit();
 
+            }
+        });
 
-        }
-    });
 
+        btnaz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sortnow();
+
+            }
+        });
+
+        btncat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                catagorylist();
+            }
+        });
+
+        showSystemUI();
 
         return view;
 
     }
+    private void showSystemUI() {
+        View decorView = getActivity().getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+
+
+    private void catagorylist() {
+        // retrieveValuesFromListMethod1(list);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Catogary");
+
+
+        Log.e("CAT SIZE", "--> " + myDataset.size());
+
+        final ArrayList<String> strBrandList = new ArrayList<String>();
+        for (int i = 0; i < myDataset.size(); i++) {
+            strBrandList.add(myDataset.get(i).getcategory());
+        }
+
+        final CharSequence[] chars = strBrandList.toArray(new CharSequence[strBrandList.size()]);
+
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                selection = (chars[item]).toString();
+                // inputCat.setText(selection);
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void Sortnow() {
+        final CharSequence[] items = {"A-Z", "Z-A", "Date Asc", "Date Dsc"};
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Sort Methord");
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                selection = (items[item]).toString();
+                selectType();
+
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void selectType() {
+        if (selection == "Camera") {
+
+
+        } else {
+
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.toolbarmenu, menu);
@@ -127,18 +220,20 @@ public class Browse extends Fragment {
                 Toast.makeText(getActivity(), "Data", Toast.LENGTH_LONG).show();
                 // filter recycler view when query submitted
                 mAdapter.getFilter().filter(query);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                Toast.makeText(getActivity(), "deleting Data", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "deleting Data", Toast.LENGTH_LONG).show();
                 // filter recycler view when text is changed
-                mAdapter.getFilter().filter(query);
+               // mAdapter.getFilter().filter(query);
                 return false;
             }
         });
     }
+
 
     private void setDatalist() {
         avi.show();
@@ -173,6 +268,7 @@ public class Browse extends Fragment {
                                         Browse_data data = new Browse_data(Title, Category, image, Docid, discrip, asd);
                                         myDataset.add(data);
                                         addToAdapter();
+                                        mAdapter.notifyDataSetChanged();
 
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -201,6 +297,7 @@ public class Browse extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         avi.setVisibility(View.GONE);
+        mAdapter.notifyDataSetChanged();
 
     }
 
