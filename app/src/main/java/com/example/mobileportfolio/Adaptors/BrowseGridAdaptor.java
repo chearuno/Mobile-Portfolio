@@ -79,8 +79,9 @@ public class BrowseGridAdaptor extends RecyclerView.Adapter<BrowseGridAdaptor.Vi
 
         Picasso.get()
                 .load(Browse_data.geturi())
-                .resize(640, 480)
+               // .resize(640, 480)
                 .centerCrop()
+                .fit()
                 .placeholder(R.drawable.iconsloadpng)
                 .error(R.drawable.errorcloud)
                 .into(holder.tumbnail);

@@ -47,6 +47,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //implements BrowseAdaptor.BrowseAdaptorListener
@@ -67,6 +68,7 @@ public class Browse extends Fragment  {
     private String selectionfr;
     private String DOWNLOAD_DIR = Environment.getExternalStoragePublicDirectory
             (Environment.DIRECTORY_DOWNLOADS).getPath();
+    private boolean ascending = true;
 
 
     @Override
@@ -288,6 +290,15 @@ public class Browse extends Fragment  {
                     }
                 });
     }
+
+//    private void sortData(boolean asc) {
+//        //SORT ARRAY ASCENDING AND DESCENDING
+//        if (asc) {
+//            Collections.sort(myDataset);
+//        } else {
+//            Collections.reverse(myDataset);
+//        }
+//    }
 
     public void addToAdapter() {
         mAdapter = new BrowseAdaptor(myDataset, getContext());

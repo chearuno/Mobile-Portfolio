@@ -81,15 +81,15 @@
 
         <!-- Link to Login Screen -->
 
-        <Button
-            android:id="@+id/btn_google_login"
-            android:layout_width="fill_parent"
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btn_google"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:background="@null"
             android:text="Sign Up With Google"
             android:textAllCaps="false"
-            android:textColor="@color/contact_name"
-            android:textSize="15dp" />
+            android:textColor="@color/contact_name" />
+
 
         <Button
             android:id="@+id/sign_in_button"
